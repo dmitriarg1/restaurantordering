@@ -1,4 +1,4 @@
-import { menuArray } from './data.js'
+import { menuArray } from './data'
 
 const itemsSection = document.getElementById('item-section')
 const orderSection = document.getElementById('order-section')
@@ -13,7 +13,7 @@ document.addEventListener('click', function(e){
         handleAddClick(Number(e.target.dataset.add)) 
     }
     else if(e.target.dataset.remove){
-        handleRemoveClick(e.target.dataset.remove)
+        handleRemoveClick(Number(e.target.dataset.remove))
     }
     else if(e.target.id==='order-btn'){
         handleOrderBtnClick()
@@ -47,6 +47,7 @@ function render () {
     }).join('')
     if(orderCart.length>0) {
         let total=0
+        let cartindex=0
         let orderHTML=`<div class="orderheader">Your order</div>`
         orderHTML+=orderCart.map(item => {
                 const {
@@ -54,11 +55,12 @@ function render () {
                     name,
                     price
                 } = item
+                console.log(`cartindex: ${cartindex}`)
                 total+=price
      //           console.log(total)
                     return `
                 <div class="itemorderblock">
-                    <div class="choiceitem">${name}<span data-remove="${id}" class="removebtn">remove</span></div>
+                    <div class="choiceitem">${name}<span data-remove="${cartindex++}" class="removebtn">remove</span></div>
                     <div class="priceitem">$${price}</div>
                 </div>`
         }).join('')
@@ -77,8 +79,7 @@ function handleAddClick(itemid) {
         render()
 } 
 function handleRemoveClick(itemid) {
-    const removedItem = menuArray.filter((el) => el.id === itemid)[0]
-        orderCart.pop(removedItem)
+        orderCart.splice(itemid,1)
         render()
 } 
 function handleOrderBtnClick() {
